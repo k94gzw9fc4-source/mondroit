@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MonDroit">
+<meta name="theme-color" content="#0a0a0f">
+<title>MonDroit — Je me défends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c27;--border:#2a2a3a;--accent:#4ade80;--accent2:#facc15;--accent3:#f87171;--text:#f0f0f5;--muted:#7070a0;--radius:18px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100dvh;overflow-x:hidden}
+.header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(16px);padding:16px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent)}.logo span{color:var(--text)}
+.back-btn{display:none;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.screen{display:none;padding:20px;animation:fadeIn 0.3s ease}.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hero{text-align:center;padding:32px 0 28px}
+.hero-badge{display:inline-block;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:var(--accent);font-size:12px;font-weight:600;padding:5px 14px;border-radius:50px;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase}
+.hero h1{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.1;margin-bottom:12px;letter-spacing:-1px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{color:var(--muted);font-size:15px;line-height:1.6;max-width:280px;margin:0 auto}
+.section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;margin-top:28px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;cursor:pointer;transition:all 0.2s ease;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.cat-card.green::before{background:var(--accent)}.cat-card.yellow::before{background:var(--accent2)}.cat-card.red::before{background:var(--accent3)}.cat-card.blue::before{background:#60a5fa}
+.cat-card:active{transform:scale(0.97);opacity:0.9}
+.cat-icon{font-size:32px;margin-bottom:12px}
+.cat-card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.2}
+.cat-card p{font-size:12px;color:var(--muted);line-height:1.4}
+.urgency{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:var(--radius);padding:16px;margin-top:24px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.urgency:active{transform:scale(0.98)}
+.urgency-icon{font-size:28px;flex-shrink:0}
+.urgency-text h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--accent3);margin-bottom:3px}
+.urgency-text p{font-size:13px;color:var(--muted)}
+.flow-header{margin-bottom:28px}
+.flow-step{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.flow-header h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1.15;letter-spacing:-0.5px}
+.flow-header p{color:var(--muted);font-size:14px;margin-top:10px;line-height:1.5}
+.options{display:flex;flex-direction:column;gap:10px}
+.option-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:14px;color:var(--text);font-family:'DM Sans',sans-serif}
+.option-btn:active{transform:scale(0.98);border-color:var(--accent);background:rgba(74,222,128,0.08)}
+.option-icon{font-size:24px;flex-shrink:0}
+.option-label{font-size:16px;font-weight:500}.option-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.photo-zone{background:var(--surface);border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;margin-bottom:16px;transition:all 0.2s;position:relative}
+.photo-zone:active{border-color:var(--accent);background:rgba(74,222,128,0.05)}
+.photo-icon{font-size:48px;margin-bottom:12px}
+.photo-zone h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.photo-zone p{font-size:14px;color:var(--muted)}
+#photo-input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-preview{width:100%;border-radius:var(--radius);margin-bottom:16px;display:none;max-height:240px;object-fit:cover}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.result-tag{display:inline-block;padding:4px 12px;border-radius:50px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px}
+.tag-green{background:rgba(74,222,128,0.15);color:var(--accent)}.tag-yellow{background:rgba(250,204,21,0.15);color:var(--accent2)}.tag-red{background:rgba(248,113,113,0.15);color:var(--accent3)}
+.result-card h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:12px;line-height:1.2}
+.result-card p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.steps-list{list-style:none;margin-top:16px}
+.steps-list li{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border);font-size:14px;line-height:1.5}
+.steps-list li:last-child{border-bottom:none}
+.step-num{background:var(--accent);color:#000;font-weight:700;font-size:12px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.letter-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;margin-bottom:16px}
+.btn{width:100%;padding:18px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;margin-bottom:10px}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--accent);color:#000}.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.loading{display:none;text-align:center;padding:40px 20px}.loading.active{display:block}
+.spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:var(--muted);font-size:15px}
+.ai-result{display:none}.ai-result.active{display:block}
+.timer-card{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:var(--radius);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.timer-label{font-size:13px;color:var(--muted);margin-bottom:4px}
+.timer-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent3)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:50px;padding:6px 14px;font-size:12px;color:var(--muted)}
+.chip strong{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">Mon<span>Droit</span></div>
+  <button class="back-btn" id="back-btn" onclick="goHome()">← Accueil</button>
+</div>
+
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <div class="hero-badge">100% Légal · Gratuit</div>
+    <h1>Je me défends<br><em>face au système</em></h1>
+    <p>PV, huissiers, saisies — je sais quoi faire, étape par étape, sans jargon.</p>
+  </div>
+  <div class="section-title">Choisir mon problème</div>
+  <div class="card-grid">
+    <div class="cat-card green" onclick="showScreen('screen-pv')">
+      <div class="cat-icon">🚗</div>
+      <h3>J'ai reçu un PV</h3>
+      <p>Contester, trouver les failles</p>
+    </div>
+    <div class="cat-card yellow" onclick="showScreen('screen-huissier')">
+      <div class="cat-icon">📋</div>
+      <h3>Un huissier me contacte</h3>
+      <p>Mes droits, comment bloquer</p>
+    </div>
+    <div class="cat-card red" onclick="showScreen('screen-saisie')">
+      <div class="cat-icon">🏦</div>
+      <h3>Saisie sur compte</h3>
+      <p>Stopper, contester, agir</p>
+    </div>
+    <div class="cat-card blue" onclick="showScreen('screen-photo')">
+      <div class="cat-icon">📷</div>
+      <h3>Analyser un document</h3>
+      <p>Photo → conseil personnalisé</p>
+    </div>
+  </div>
+  <div class="urgency" onclick="showScreen('screen-urgence')">
+    <div class="urgency-icon">🆘</div>
+    <div class="urgency-text">
+      <h4>C'est urgent !</h4>
+      <p>Huissier à la porte, saisie en cours — je suis là</p>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-pv">
+  <div class="flow-header">
+    <div class="flow-step">PV / Amende</div>
+    <h2>C'est quel type de PV ?</h2>
+    <p>Je vais trouver les failles pour toi.</p>
+  </div>
+  <div class="options">
+    <button class="option-btn" onclick="showPVResult('radar')">
+      <span class="option-icon">📸</span>
+      <div><div class="option-label">Radar automatique</div><div class="option-sub">Photo de ma voiture / moto</div></div>
+    </button>
+    <button class="option-btn" onclick="showPVResult('stationnement')">
+      <span class="option-icon">🅿️</span>
+      <div><div class="option-label">Stationnement</div><div class="option-sub">PV sur pare-brise ou FPS</div></div>
+    </button>
+    <button class="option-btn" onclick="showPVResult('police')">
+      <span class="option-icon">👮</span>
+      <div><div class="option-label">Contrôle par un agent</div><div class="option-sub">Remis en main propre</div></div>
+    </button>
+    <button class="option-btn" onclick="showPVResult('autre')">
+      <span class="option-icon">📄</span>
+      <div><div class="option-label">Autre / Je ne sais pas</div><div class="option-sub">Je vais analyser</div></div>
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-pv-result"><div id="pv-result-content"></div></div>
+
+<div class="screen" id="screen-huissier">
+  <div class="flow-header">
+    <div class="flow-step">Commissaire de justice</div>
+    <h2>Qu'est-ce qui se passe ?</h2>
+    <p>Tes droits sont les mêmes qu'avant.</p>
+  </div>
+  <div class="options">
+    <button class="option-btn" onclick="showHuissierResult('lettre')">
+      <span class="option-icon">✉️</span>
+      <div><div class="option-label">J'ai reçu une lettre</div><div class="option-sub">Mise en demeure, commandement</div></div>
+    </button>
+    <button class="option-btn" onclick="showHuissierResult('porte')">
+      <span class="option-icon">🚪</span>
+      <div><div class="option-label">Il frappe à ma porte</div><div class="option-sub">Je ne sais pas quoi faire</div></div>
+    </button>
+    <button class="option-btn" onclick="showHuissierResult('telephone')">
+      <span class="option-icon">📞</span>
+      <div><div class="option-label">Il m'appelle / harcèle</div><div class="option-sub">Relances abusives</div></div>
+    </button>
+    <button class="option-btn" onclick="showHuissierResult('injonction')">
+      <span class="option-icon">⚖️</span>
+      <div><div class="option-label">Injonction de payer</div><div class="option-sub">Le tribunal a décidé quelque chose</div></div>
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-huissier-result"><div id="huissier-result-content"></div></div>
+
+<div class="screen" id="screen-saisie">
+  <div class="flow-header">
+    <div class="flow-step">Saisie</div>
+    <h2>Quel type de saisie ?</h2>
+    <p>La loi te protège toujours un minimum.</p>
+  </div>
+  <div class="options">
+    <button class="option-btn" onclick="showSaisieResult('compte')">
+      <span class="option-icon">🏦</span>
+      <div><div class="option-label">Mon compte bancaire</div><div class="option-sub">Argent bloqué ou prélevé</div></div>
+    </button>
+    <button class="option-btn" onclick="showSaisieResult('salaire')">
+      <span class="option-icon">💰</span>
+      <div><div class="option-label">Sur mon salaire</div><div class="option-sub">Mon employeur a été contacté</div></div>
+    </button>
+    <button class="option-btn" onclick="showSaisieResult('biens')">
+      <span class="option-icon">🏠</span>
+      <div><div class="option-label">Mes biens / meubles</div><div class="option-sub">Inventaire ou vente forcée</div></div>
+    </button>
+    <button class="option-btn" onclick="showSaisieResult('vehicule')">
+      <span class="option-icon">🚗</span>
+      <div><div class="option-label">Mon véhicule</div><div class="option-sub">Fourrière judiciaire</div></div>
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-saisie-result"><div id="saisie-result-content"></div></div>
+
+<div class="screen" id="screen-photo">
+  <div class="flow-header">
+    <div class="flow-step">Analyse de document</div>
+    <h2>Prends ton document en photo</h2>
+    <p>Je l'analyse et je te dis quoi faire.</p>
+  </div>
+  <img class="photo-preview" id="photo-preview" src="" alt="Document">
+  <div class="photo-zone" id="photo-zone">
+    <input type="file" id="photo-input" accept="image/*" capture="environment" onchange="handlePhoto(this)">
+    <div class="photo-icon">📷</div>
+    <h3>Prendre une photo</h3>
+    <p>Ou importer depuis la galerie</p>
+  </div>
+  <div class="loading" id="photo-loading">
+    <div class="spinner"></div>
+    <p>J'analyse ton document…</p>
+  </div>
+  <div class="ai-result" id="ai-result">
+    <div class="result-card">
+      <div class="result-tag tag-green">Analyse IA</div>
+      <h3 id="ai-title">Résultat</h3>
+      <div id="ai-content"></div>
+    </div>
+    <button class="btn btn-primary" onclick="showLetterScreen()">📄 Générer un courrier</button>
+    <button class="btn btn-secondary" onclick="resetPhoto()">📷 Nouvelle photo</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-letter">
+  <div class="flow-header">
+    <div class="flow-step">Courrier officiel</div>
+    <h2>Ton courrier est prêt</h2>
+    <p>Envoie en LRAR.</p>
+  </div>
+  <div class="letter-box" id="letter-content"></div>
+  <button class="btn btn-primary" onclick="copyLetter()">📋 Copier le courrier</button>
+  <button class="btn btn-secondary" onclick="goHome()">← Retour accueil</button>
+</div>
+
+<div class="screen" id="screen-urgence">
+  <div class="flow-header">
+    <div class="flow-step">🆘 Urgence</div>
+    <h2>Calme-toi, tu as des droits.</h2>
+  </div>
+  <div class="result-card">
+    <div class="result-tag tag-red">⚡ Ce qu'il faut savoir maintenant</div>
+    <ul class="steps-list">
+      <li><div class="step-num">1</div><div><strong>Ouvre pas la porte</strong> — L'huissier ne peut pas entrer de force sans juge et police.</div></li>
+      <li><div class="step-num">2</div><div><strong>Demande son titre</strong> — Il doit te présenter l'acte. Vérifie nom, montant, dette.</div></li>
+      <li><div class="step-num">3</div><div><strong>Ne signe rien sous pression</strong> — Tu peux demander un délai.</div></li>
+      <li><div class="step-num">4</div><div><strong>1 mois pour contester</strong> — Devant le juge de l'exécution (JEX).</div></li>
+      <li><div class="step-num">5</div><div><strong>Biens insaisissables</strong> — Vêtements, nourriture, lit, outils de travail sont protégés.</div></li>
+    </ul>
+  </div>
+  <button class="btn btn-primary" onclick="showScreen('screen-huissier')">Je veux aller plus loin</button>
+  <button class="btn btn-secondary" onclick="showScreen('screen-photo')">📷 Analyser le document reçu</button>
+</div>
+<script>
+let currentLetter='';
+let currentAIContext='';
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const b=document.getElementById('back-btn');
+  b.style.display=id==='screen-home'?'none':'block';
+  window.scrollTo(0,0);
+}
+
+function goHome(){showScreen('screen-home');}
+
+function showPVResult(type){
+  const data={
+    radar:{tag:'tag-yellow',tagText:'45 jours pour agir',title:'PV Radar — Les failles',intro:'Voici ce qu\'il faut vérifier.',steps:[
+      {icon:'📅',text:'<strong>Délai</strong> — 45 jours (60 si avis électronique) pour contester.'},
+      {icon:'🔍',text:'<strong>Plaque lisible ?</strong> — Si illisible sur la photo du radar = annulation.'},
+      {icon:'📐',text:'<strong>Marge d\'erreur</strong> — 5km/h en dessous de 100, 5% au-delà. Vérifie.'},
+      {icon:'🔧',text:'<strong>Contrôle métrologique</strong> — Le radar doit être vérifié chaque année.'},
+      {icon:'🚗',text:'<strong>Pas au volant ?</strong> — Désigne un autre conducteur via ANTAI.'},
+    ],letter:true},
+    stationnement:{tag:'tag-green',tagText:'Procédure spéciale',title:'Stationnement — Tes recours',intro:'Depuis 2018 c\'est un FPS, pas une contravention.',steps:[
+      {icon:'📋',text:'<strong>RAPO d\'abord</strong> — Recours gratuit et obligatoire avant la justice.'},
+      {icon:'⏱️',text:'<strong>3 mois</strong> pour contester le FPS.'},
+      {icon:'🔍',text:'<strong>Vices de forme</strong> — Marquage effacé, panneau illisible = preuve photo.'},
+      {icon:'📞',text:'<strong>Si refus RAPO</strong> — Saisir la CCSP dans le mois suivant.'},
+    ],letter:true},
+    police:{tag:'tag-yellow',tagText:'Agent verbalisateur',title:'PV agent — Tes droits',intro:'Contestable si erreur ou faits inexacts.',steps:[
+      {icon:'✍️',text:'<strong>Refuser de signer</strong> — Ça ne change pas la validité du PV.'},
+      {icon:'📝',text:'<strong>Mentions obligatoires</strong> — Date, heure, lieu, infraction, nom agent.'},
+      {icon:'⏱️',text:'<strong>45 jours</strong> pour écrire à l\'officier du ministère public.'},
+      {icon:'👥',text:'<strong>Témoin ?</strong> — Une attestation est une preuve solide.'},
+    ],letter:true},
+    autre:{tag:'tag-green',tagText:'Analyse générale',title:'Quoi vérifier',intro:'Ces règles s\'appliquent à tous les PV.',steps:[
+      {icon:'⏱️',text:'<strong>Le délai</strong> — Dans les 45 jours ? Tu peux contester.'},
+      {icon:'🔍',text:'<strong>Erreurs</strong> — Mauvaise plaque, date, adresse = annulation possible.'},
+      {icon:'💌',text:'<strong>Ne paie pas avant de contester</strong> — Paiement = renonciation.'},
+    ],letter:false}
+  };
+  const d=data[type];
+  const s=d.steps.map(x=>`<li><div class="step-num">${x.icon}</div><div>${x.text}</div></li>`).join('');
+  const lb=d.letter?`<button class="btn btn-primary" onclick="generateLetter('pv_${type}')">📄 Générer mon courrier</button>`:'';
+  document.getElementById('pv-result-content').innerHTML=`
+    <div class="flow-header"><div class="flow-step">PV / Amende</div><h2>${d.title}</h2></div>
+    <div class="result-card"><div class="result-tag ${d.tag}">${d.tagText}</div><p>${d.intro}</p><ul class="steps-list">${s}</ul></div>
+    ${lb}<button class="btn btn-secondary" onclick="showScreen('screen-photo')">📷 Analyser mon PV</button>`;
+  showScreen('screen-pv-result');
+}
+
+function showHuissierResult(type){
+  const data={
+    lettre:{title:'Lettre huissier — Quoi faire',steps:[
+      {icon:'🔍',text:'<strong>Vérifie la dette</strong> — Montant correct ? Tu dois vraiment ça ?'},
+      {icon:'📅',text:'<strong>Prescription</strong> — 2 ans consommation, 5 ans civil. Après = ils ne peuvent plus forcer.'},
+      {icon:'✉',text:'<strong>Réponds en LRAR</strong> — Toujours recommandé. Garde tout.'},
+      {icon:'⏱️',text:'<strong>1 mois</strong> pour contester en général.'},
+      {icon:'🏛️',text:'<strong>Juge de l\'exécution</strong> — Tu peux le saisir sans avocat.'},
+    ]},
+    porte:{title:'Huissier à la porte — Maintenant',steps:[
+      {icon:'🚪',text:'<strong>Tu n\'as pas à ouvrir</strong> — Entrée de force = illégal sans juge + police.'},
+      {icon:'📄',text:'<strong>Demande l\'acte</strong> — Sous la porte ou interphone.'},
+      {icon:'🚫',text:'<strong>Ne signe rien</strong> — Prends 24h.'},
+      {icon:'📸',text:'<strong>Photo de l\'acte</strong> — Montant, créancier, nature.'},
+      {icon:'📞',text:'<strong>Appelle le 3039</strong> — Info juridique gratuite de l\'État.'},
+    ]},
+    telephone:{title:'Harcèlement — Tes droits',steps:[
+      {icon:'⏰',text:'<strong>Horaires légaux</strong> — 8h-20h semaine uniquement.'},
+      {icon:'🚫',text:'<strong>Harcèlement = délit</strong> — Appels répétés, menaces = pénal.'},
+      {icon:'📝',text:'<strong>Note tout</strong> — Heure, date, contenu.'},
+      {icon:'✉️',text:'<strong>Lettre LRAR</strong> — Exige communication uniquement par écrit.'},
+      {icon:'⚖️',text:'<strong>DGCCRF</strong> — Signale les abus des sociétés de recouvrement.'},
+    ]},
+    injonction:{title:'Injonction de payer — Tes recours',steps:[
+      {icon:'⏱️',text:'<strong>1 mois pour faire opposition</strong> — Sinon définitif.'},
+      {icon:'📝',text:'<strong>Opposition suspend tout</strong> — Les poursuites s\'arrêtent.'},
+      {icon:'🏛️',text:'<strong>Formulaire CERFA 12948</strong> — Gratuit au greffe.'},
+      {icon:'🔍',text:'<strong>Vérifie la dette</strong> — Le créancier doit prouver.'},
+    ]}
+  };
+  const d=data[type];
+  const s=d.steps.map(x=>`<li><div class="step-num">${x.icon}</div><div>${x.text}</div></li>`).join('');
+  document.getElementById('huissier-result-content').innerHTML=`
+    <div class="flow-header"><div class="flow-step">Commissaire de justice</div><h2>${d.title}</h2></div>
+    <div class="result-card"><ul class="steps-list">${s}</ul></div>
+    <button class="btn btn-primary" onclick="generateLetter('huissier_${type}')">📄 Générer un courrier</button>
+    <button class="btn btn-secondary" onclick="showScreen('screen-photo')">📷 Analyser le document</button>`;
+  showScreen('screen-huissier-result');
+}
+
+function showSaisieResult(type){
+  const data={
+    compte:{title:'Saisie bancaire — Agis vite',steps:[
+      {icon:'💶',text:'<strong>635,70€ insaisissables</strong> — La banque doit te laisser ce minimum automatiquement.'},
+      {icon:'⏱️',text:'<strong>1 mois pour contester</strong> — Devant le JEX.'},
+      {icon:'📋',text:'<strong>Dette réelle ?</strong> — Erreur ou prescription = annulation.'},
+      {icon:'📄',text:'<strong>Surendettement</strong> — Dossier Banque de France = suspend toutes les saisies.'},
+    ]},
+    salaire:{title:'Saisie salaire — Ce qui est protégé',steps:[
+      {icon:'💰',text:'<strong>RSA minimum garanti</strong> — Toujours, quoi qu\'il arrive.'},
+      {icon:'📊',text:'<strong>Barème progressif</strong> — Plus ton salaire est bas, moins ils peuvent prendre.'},
+      {icon:'🏢',text:'<strong>Passe par le juge</strong> — Obligatoire. Ton employeur reçoit l\'ordre direct.'},
+    ]},
+    biens:{title:'Saisie de biens — Ce qu\'ils ne peuvent pas prendre',steps:[
+      {icon:'🛡️',text:'<strong>Insaisissables</strong> — Vêtements, nourriture, médicaments, lit, outils de travail.'},
+      {icon:'📋',text:'<strong>Inventaire obligatoire</strong> — Vérifie chaque ligne.'},
+      {icon:'⏱️',text:'<strong>8 jours</strong> pour régulariser avant vente forcée.'},
+    ]},
+    vehicule:{title:'Saisie véhicule — Tes droits',steps:[
+      {icon:'📋',text:'<strong>Titre exécutoire obligatoire</strong> — Sans jugement = illégal.'},
+      {icon:'🔧',text:'<strong>Outil de travail ?</strong> — Livreur, artisan, VTC = argument d\'insaisissabilité.'},
+      {icon:'⏱️',text:'<strong>1 mois pour contester</strong>.'},
+    ]}
+  };
+  const d=data[type];
+  const s=d.steps.map(x=>`<li><div class="step-num">${x.icon}</div><div>${x.text}</div></li>`).join('');
+  document.getElementById('saisie-result-content').innerHTML=`
+    <div class="flow-header"><div class="flow-step">Saisie</div><h2>${d.title}</h2></div>
+    <div class="result-card"><ul class="steps-list">${s}</ul></div>
+    <button class="btn btn-primary" onclick="generateLetter('saisie_${type}')">📄 Générer un courrier</button>
+    <button class="btn btn-secondary" onclick="showScreen('screen-photo')">📷 Analyser le document</button>`;
+  showScreen('screen-saisie-result');
+}
+
+function handlePhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    const base64=e.target.result;
+    document.getElementById('photo-preview').src=base64;
+    document.getElementById('photo-preview').style.display='block';
+    document.getElementById('photo-zone').style.display='none';
+    analyzeWithAI(base64);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzeWithAI(base64Full){
+  document.getElementById('photo-loading').classList.add('active');
+  document.getElementById('ai-result').classList.remove('active');
+  try{
+    const base64Data=base64Full.split(',')[1];
+    const mimeType=base64Full.split(';')[0].split(':')[1];
+    const response=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:`Tu es un assistant juridique français. Analyse ce document officiel et réponds UNIQUEMENT en JSON sans backticks : {"type":"type du document","montant":"xxx€ ou inconnu","delai":"délai d'action","alerte":"message urgent court","failles":["faille 1","faille 2"],"actions":["action 1","action 2","action 3"]}`,
+        messages:[{role:"user",content:[
+          {type:"image",source:{type:"base64",media_type:mimeType,data:base64Data}},
+          {type:"text",text:"Analyse ce document juridique et réponds en JSON."}
+        ]}]
+      })
+    });
+    const data=await response.json();
+    const text=data.content.map(i=>i.text||'').join('');
+    let result;
+    try{result=JSON.parse(text.replace(/```json|```/g,'').trim());}
+    catch{result={type:"Document",montant:"À vérifier",delai:"À vérifier",alerte:"Lis bien",failles:["Vérifie les dates","Vérifie les montants"],actions:["Ne paie rien","Vérifie tout","Utilise l'app"]};}
+    currentAIContext=JSON.stringify(result);
+    document.getElementById('ai-title').textContent=result.type||'Document analysé';
+    let html='';
+    if(result.alerte)html+=`<div class="timer-card"><div><div class="timer-label">⚡ Alerte</div><div class="timer-value" style="font-size:15px;color:var(--accent2)">${result.alerte}</div></div></div>`;
+    html+=`<div class="chips">`;
+    if(result.montant)html+=`<div class="chip">💶 <strong>${result.montant}</strong></div>`;
+    if(result.delai)html+=`<div class="chip">⏱️ <strong>${result.delai}</strong></div>`;
+    html+=`</div>`;
+    if(result.failles&&result.failles.length){
+      html+=`<p style="font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600">FAILLES DÉTECTÉES</p><ul class="steps-list">`;
+      result.failles.forEach((f,i)=>{html+=`<li><div class="step-num" style="background:var(--accent2);color:#000">${i+1}</div><div>${f}</div></li>`;});
+      html+=`</ul>`;
+    }
+    if(result.actions&&result.actions.length){
+      html+=`<p style="font-size:13px;color:var(--muted);margin:16px 0 10px;font-weight:600">CE QUE TU DOIS FAIRE</p><ul class="steps-list">`;
+      result.actions.forEach((a,i)=>{html+=`<li><div class="step-num">${i+1}</div><div>${a}</div></li>`;});
+      html+=`</ul>`;
+    }
+    document.getElementById('ai-content').innerHTML=html;
+    document.getElementById('photo-loading').classList.remove('active');
+    document.getElementById('ai-result').classList.add('active');
+  }catch(err){
+    document.getElementById('photo-loading').classList.remove('active');
+    document.getElementById('ai-result').classList.add('active');
+    document.getElementById('ai-title').textContent='Erreur';
+    document.getElementById('ai-content').innerHTML='<p>Vérifie ta connexion et réessaie.</p>';
+  }
+}
+
+function resetPhoto(){
+  document.getElementById('photo-preview').style.display='none';
+  document.getElementById('photo-zone').style.display='block';
+  document.getElementById('ai-result').classList.remove('active');
+  document.getElementById('photo-input').value='';
+  currentAIContext='';
+}
+
+async function generateLetter(context){
+  showScreen('screen-letter');
+  document.getElementById('letter-content').textContent='Génération en cours…';
+  const prompts={
+    'pv_radar':'Courrier contestation PV radar ANTAI. Arguments : vice de forme, marge erreur, vérification métrologique.',
+    'pv_stationnement':'Courrier RAPO contestation FPS stationnement. Arguments légaux.',
+    'pv_police':'Courrier contestation PV agent à officier ministère public. Vice de forme, contestation faits.',
+    'pv_autre':'Courrier générique contestation amende avec réserve de tous droits.',
+    'huissier_lettre':'Courrier contestation mise en demeure huissier. Demande justificatifs, vérification dette.',
+    'huissier_porte':'Courrier à commissaire de justice après visite. Demande actes et délais.',
+    'huissier_telephone':'Mise en demeure société recouvrement harcèlement. Refs L111-8 et L111-9 CPCE.',
+    'huissier_injonction':'Opposition injonction de payer. Demande audience.',
+    'saisie_compte':'Contestation saisie-attribution bancaire au JEX. Rappel solde insaisissable.',
+    'saisie_salaire':'Contestation saisie salaire. Barème et solde minimum.',
+    'saisie_biens':'Contestation saisie-vente. Biens insaisissables.',
+    'saisie_vehicule':'Contestation saisie véhicule. Titre exécutoire et outil de travail.',
+  };
+  const extra=currentAIContext?`\n\nDocument analysé : ${currentAIContext}`:'';
+  const prompt=(prompts[context]||'Courrier contestation juridique générique.')+extra;
+  try{
+    const response=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:"Tu génères des courriers juridiques français formels, prêts à envoyer. Champs à remplir entre [crochets]. Inclus expéditeur, destinataire, objet, corps, formule de politesse. Texte brut uniquement.",
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const data=await response.json();
+    const letter=data.content.map(i=>i.text||'').join('');
+    currentLetter=letter;
+    document.getElementById('letter-content').textContent=letter;
+  }catch{
+    document.getElementById('letter-content').textContent='Erreur. Vérifie ta connexion.';
+  }
+}
+
+function showLetterScreen(){generateLetter('photo_analysis');}
+
+function copyLetter(){
+  if(navigator.clipboard&&currentLetter){
+    navigator.clipboard.writeText(currentLetter).then(()=>{
+      const btn=document.querySelector('#screen-letter .btn-primary');
+      btn.textContent='✅ Copié !';
+      setTimeout(()=>btn.textContent='📋 Copier le courrier',2000);
+    });
+  }
+}
+</script>
+</body>
+</html>
+
